@@ -1,11 +1,11 @@
 package com.vourer.fhirpatientoverview.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
 import kotlinx.coroutines.Dispatchers
@@ -17,14 +17,13 @@ import org.hl7.fhir.r4.model.Patient
 
 class PatientDetailsActivity : AppCompatActivity() {
     // views for patient attributes
-    lateinit var idOutput: TextView
-    lateinit var givenOutput: TextView
-    lateinit var familyOutput: TextView
-    lateinit var genderOutput: TextView
-    lateinit var birthDateOutput: TextView
-    lateinit var historyRecycler: RecyclerView
+    private lateinit var idOutput: TextView
+    private lateinit var givenOutput: TextView
+    private lateinit var familyOutput: TextView
+    private lateinit var genderOutput: TextView
+    private lateinit var birthDateOutput: TextView
 
-    lateinit var patient: Patient
+    private lateinit var patient: Patient
     private val hapiHandler: HapiFhirHandler = HapiFhirHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +35,6 @@ class PatientDetailsActivity : AppCompatActivity() {
         familyOutput = findViewById(R.id.familyValue)
         genderOutput = findViewById(R.id.genderValue)
         birthDateOutput = findViewById(R.id.birthDateValue)
-//        historyRecycler = findViewById(R.id.recyclerView)
-//        historyRecycler.layoutManager = LinearLayoutManager(this)
-        // historyRecycler.adapter = PatientHistoryAdapter(historyItems)
 
         val extras = intent.extras ?: return
         val patientId = extras.getString("id")
@@ -48,8 +44,22 @@ class PatientDetailsActivity : AppCompatActivity() {
     fun editPatientClicked(v: View) {
         Toast.makeText(this, "'Edit' clicked", Toast.LENGTH_SHORT).show()
 //        val i = Intent(this, EditPatientActivity::class.java)
-//        i.putExtra("id", patient.id.toString())
-//        startActivityForResult(i, 1000)
+//        i.putExtra("id", patient.idElement.idPart.toString())
+//        startActivity(i)
+    }
+
+    fun resourcesClicked(v: View) {
+        Toast.makeText(this, "Loading Observations and Medication Requests...", Toast.LENGTH_SHORT).show()
+        val i = Intent(this, PatientResourcesActivity::class.java)
+        i.putExtra("id", patient.idElement.idPart.toString())
+        startActivity(i)
+    }
+
+    fun historyClicked(v: View) {
+        Toast.makeText(this, "'History of changes' clicked", Toast.LENGTH_SHORT).show()
+//        val i = Intent(this, EditPatientActivity::class.java)
+//        i.putExtra("id", patient.idElement.idPart.toString())
+//        startActivity(i)
     }
 
     fun goBackClicked(v: View) {

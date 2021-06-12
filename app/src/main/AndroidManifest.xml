@@ -12,11 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FHIRPatientOverview"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.EditPatientActivity"></activity>
+        <activity android:name=".activities.ResourceDetailsActivity"></activity>
+        <activity
+            android:name=".activities.PatientResourcesActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activities.EditPatientActivity" />
         <activity
             android:name=".activities.PatientDetailsActivity"
             android:label="@string/title_activity_patient_details" />
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".activities.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

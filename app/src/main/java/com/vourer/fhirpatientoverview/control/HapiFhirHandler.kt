@@ -74,6 +74,16 @@ class HapiFhirHandler: Serializable {
                 .collect(Collectors.toList())
     }
 
+    fun getObservationWithId(resourceId: String): Resource {
+        val client = RestClient.getGenericClient()
+        return client.read().resource(Observation::class.java).withId(resourceId).execute()
+    }
+
+    fun getMedicationRequestWithId(resourceId: String): Resource {
+        val client = RestClient.getGenericClient()
+        return client.read().resource(MedicationRequest::class.java).withId(resourceId).execute()
+    }
+
     private fun getPagedEntries(receivedBundle: Bundle): List<Bundle.BundleEntryComponent> {
         var bundle = receivedBundle
         val entries: MutableCollection<Bundle.BundleEntryComponent> = bundle.entry

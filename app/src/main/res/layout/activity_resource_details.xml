@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.PatientDetailsActivity" >
+    tools:context=".activities.ResourceDetailsActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -26,11 +25,11 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/editPatientButton"
+            android:id="@+id/editResourceButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="editPatientClicked"
+            android:onClick="editResourceClicked"
             android:text="Edit Details" />
 
         <Space
@@ -39,7 +38,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/closePatientButton"
+            android:id="@+id/closeResourceButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -73,15 +72,15 @@
                 android:id="@+id/idText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Patient ID:" />
+                android:text="ID:" />
 
             <TextView
                 android:id="@+id/idValue"
-                android:layout_width="227dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="2"
                 android:gravity="center"
                 android:text="" />
-
         </TableRow>
 
         <TableRow
@@ -91,18 +90,17 @@
             android:layout_marginVertical="10dp">
 
             <TextView
-                android:id="@+id/givenText"
+                android:id="@+id/typeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Given name:" />
+                android:text="Type:" />
 
             <TextView
-                android:id="@+id/givenValue"
+                android:id="@+id/typeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="" />
-
         </TableRow>
 
         <TableRow
@@ -112,18 +110,17 @@
             android:layout_marginVertical="10dp">
 
             <TextView
-                android:id="@+id/familyText"
+                android:id="@+id/codeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Family name:" />
+                android:text="Code:" />
 
             <TextView
-                android:id="@+id/familyValue"
+                android:id="@+id/codeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="" />
-
         </TableRow>
 
         <TableRow
@@ -133,20 +130,18 @@
             android:layout_marginVertical="10dp">
 
             <TextView
-                android:id="@+id/genderText"
+                android:id="@+id/dateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gender:" />
+                android:text="Date:" />
 
             <TextView
-                android:id="@+id/genderValue"
+                android:id="@+id/dateValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="5"
-                android:singleLine="false"
+                android:maxLines="2"
                 android:gravity="center"
                 android:text="" />
-
         </TableRow>
 
         <TableRow
@@ -156,58 +151,40 @@
             android:layout_marginVertical="10dp">
 
             <TextView
-                android:id="@+id/birthDateText"
+                android:id="@+id/valueText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Birth Date:" />
+                android:text="Value:" />
 
             <TextView
-                android:id="@+id/birthDateValue"
+                android:id="@+id/valueValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp">
+
+            <TextView
+                android:id="@+id/noteText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Note:" />
+
+            <TextView
+                android:id="@+id/noteValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="5"
                 android:singleLine="false"
                 android:gravity="center"
                 android:text="" />
-
         </TableRow>
     </TableLayout>
-
-    <TextView
-        android:id="@+id/scrollText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
-        android:gravity="center"
-        android:text="Patient's medical history"
-        app:layout_constraintBottom_toTopOf="@+id/historyButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
-    <Button
-        android:id="@+id/resourcesButton"
-        android:layout_width="320dp"
-        android:layout_height="46dp"
-        android:onClick="resourcesClicked"
-        android:text="Observations and Medication"
-        app:layout_constraintBottom_toTopOf="@+id/historyButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollText" />
-
-    <Button
-        android:id="@+id/historyButton"
-        android:layout_width="320dp"
-        android:layout_height="46dp"
-        android:onClick="historyClicked"
-        android:text="History of changes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintVertical_bias="0.33" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
