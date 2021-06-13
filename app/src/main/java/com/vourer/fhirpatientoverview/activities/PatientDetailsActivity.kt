@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -37,7 +38,7 @@ class PatientDetailsActivity : AppCompatActivity() {
         birthDateOutput = findViewById(R.id.birthDateValue)
 
         val extras = intent.extras ?: return
-        val patientId = extras.getString("id")
+        val patientId = extras.getString(ExtraCodes.PATIENT_ID)
         loadPatientData(patientId!!)
     }
 
@@ -58,23 +59,22 @@ class PatientDetailsActivity : AppCompatActivity() {
     }
 
     fun editPatientClicked(v: View) {
-        Toast.makeText(this, "'Edit' clicked", Toast.LENGTH_SHORT).show()
         val i = Intent(this, EditPatientActivity::class.java)
-        i.putExtra("id", patient.idElement.idPart.toString())
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
         startActivity(i)
     }
 
     fun resourcesClicked(v: View) {
         Toast.makeText(this, "Loading Observations and Medication Requests...", Toast.LENGTH_SHORT).show()
         val i = Intent(this, PatientResourcesActivity::class.java)
-        i.putExtra("id", patient.idElement.idPart.toString())
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
         startActivity(i)
     }
 
     fun historyClicked(v: View) {
         Toast.makeText(this, "'History of changes' clicked", Toast.LENGTH_SHORT).show()
 //        val i = Intent(this, EditPatientActivity::class.java)
-//        i.putExtra("id", patient.idElement.idPart.toString())
+//        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
 //        startActivity(i)
     }
 

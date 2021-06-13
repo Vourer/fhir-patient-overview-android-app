@@ -85,6 +85,26 @@ class HapiFhirHandler: Serializable {
                 .collect(Collectors.toList())
     }
 
+    fun getPatientHistory(url: String): List<Patient?> {
+        val client = RestClient.getGenericClient()
+        val bundle: Bundle = client.search<Bundle>()
+            .byUrl(url)
+            .encodedJson()
+            .returnBundle(Bundle::class.java)
+            .execute()
+        val pHistory = getPagedEntries(bundle).stream()
+            .map(Bundle.BundleEntryComponent::getResource)
+            .filter(Patient::class.java::isInstance)
+            .map(Patient::class.java::cast)
+            .collect(Collectors.toList())
+        pHistory.sortWith(Comparator<Patient?> { p1, p2 ->
+            if (p1 != null && p2 != null && p1.meta.versionId < p2.meta.versionId) 1
+            else if (p1 != null && p2 != null && p1.meta.versionId == p2.meta.versionId) 0
+            else -1
+        })
+        return pHistory
+    }
+
     fun getObservationWithId(resourceId: String): Resource {
         val client = RestClient.getGenericClient()
         return client.read().resource(Observation::class.java).withId(resourceId).execute()

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.adapters.PatientResourcesAdapter
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ class PatientResourcesActivity : AppCompatActivity() {
         resourcesRecycler.adapter = PatientResourcesAdapter(resources)
 
         val extras = intent.extras ?: return
-        val patientId = extras.getString("id")
+        val patientId = extras.getString(ExtraCodes.PATIENT_ID)
         loadPatientResources(patientId!!)
     }
 
@@ -121,7 +122,7 @@ class PatientResourcesActivity : AppCompatActivity() {
 
     fun showGraphClicked(v: View) {
         val i = Intent(this, GraphActivity::class.java)
-        i.putExtra("id", patient.idElement.idPart.toString())
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
         startActivity(i)
     }
 

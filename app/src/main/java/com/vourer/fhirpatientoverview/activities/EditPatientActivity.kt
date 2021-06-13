@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.*
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ class EditPatientActivity : AppCompatActivity() {
         }
 
         val extras = intent.extras ?: return
-        val patientId = extras.getString("id")
+        val patientId = extras.getString(ExtraCodes.PATIENT_ID)
         loadPatientData(patientId!!)
     }
 
@@ -81,10 +82,10 @@ class EditPatientActivity : AppCompatActivity() {
         val newPatient = patient
         if (newGivenInput != "" && newGivenInput != "null") {
             val givenParts: List<StringType> = newGivenInput.split(" ").map { StringType(it) }
-            newPatient.name[0].setGiven(givenParts)
+            newPatient.name[0].given = givenParts
         }
         if (newFamilyInput != "" && newFamilyInput != "null") {
-            newPatient.name[0].setFamily(newFamilyInput)
+            newPatient.name[0].family = newFamilyInput
         }
         if (patient.gender.toCode() != newGenderValue) {
             newPatient.gender = Enumerations.AdministrativeGender.fromCode(newGenderValue)

@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -42,8 +43,8 @@ class ResourceDetailsActivity : AppCompatActivity() {
         noteInput = findViewById(R.id.noteValue)
 
         val extras = intent.extras ?: return
-        val resourceId = extras.getString("id")
-        val resourceType = extras.getString("type")
+        val resourceId = extras.getString(ExtraCodes.RESOURCE_ID)
+        val resourceType = extras.getString(ExtraCodes.RESOURCE_TYPE)
         loadResourceData(resourceId!!, resourceType!!)
     }
 
@@ -84,10 +85,9 @@ class ResourceDetailsActivity : AppCompatActivity() {
     }
 
     private fun loadResourceData(resourceId: String, resourceType: String) {
-        var resource: Resource? = null
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-                mResource = if (resourceType == "m") {
+                mResource = if (resourceType == ExtraCodes.TYPE_MED_REQ) {
                     hapiHandler.getMedicationRequestWithId(resourceId)
                 } else {
                     hapiHandler.getObservationWithId(resourceId)

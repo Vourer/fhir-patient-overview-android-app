@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.activities.PatientDetailsActivity
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import org.hl7.fhir.r4.model.Patient
 import kotlin.collections.ArrayList
 
@@ -36,7 +37,7 @@ class PatientSearchAdapter (private val mPatients: ArrayList<Patient>) : Recycle
 
         viewHolder.searchItemName.setOnClickListener {
             val i = Intent(context, PatientDetailsActivity::class.java)
-            i.putExtra("id", patient.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
             context.startActivity(i)
         }
 
@@ -47,18 +48,12 @@ class PatientSearchAdapter (private val mPatients: ArrayList<Patient>) : Recycle
 
         viewHolder.searchItemBirthDate.setOnClickListener {
             val i = Intent(context, PatientDetailsActivity::class.java)
-            i.putExtra("id", patient.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
             context.startActivity(i)
         }
     }
 
     override fun getItemCount(): Int {
         return mPatients.size
-    }
-
-    fun loadNewPatient(newPatient: Patient) {
-        val count = mPatients.size
-        mPatients.add(newPatient)
-        notifyItemInserted(count)
     }
 }

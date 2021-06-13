@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.activities.ResourceDetailsActivity
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import org.hl7.fhir.r4.model.MedicationRequest
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Resource
@@ -33,7 +34,7 @@ class PatientResourcesAdapter (private val mResources: ArrayList<Resource>) : Re
 
         val itemDate = viewHolder.itemDate
         val itemName = viewHolder.itemName
-        var itemType = "m"
+        var itemType = ExtraCodes.TYPE_MED_REQ
 
         if (resource is MedicationRequest) {
             val medCode = resource.medicationCodeableConcept.codingFirstRep.display
@@ -41,7 +42,7 @@ class PatientResourcesAdapter (private val mResources: ArrayList<Resource>) : Re
             itemName.text = medCode
             itemDate.text = medDate.toString()
         } else if (resource is Observation) {
-            itemType = "o"
+            itemType = ExtraCodes.TYPE_OBS
             val obsCode = resource.code.codingFirstRep.display
             val obsDate = resource.issued
             itemName.text = obsCode
@@ -50,25 +51,19 @@ class PatientResourcesAdapter (private val mResources: ArrayList<Resource>) : Re
 
         viewHolder.itemDate.setOnClickListener {
             val i = Intent(context, ResourceDetailsActivity::class.java)
-            i.putExtra("id", resource.idElement.idPart.toString())
-            i.putExtra("type", itemType)
+            i.putExtra(ExtraCodes.RESOURCE_ID, resource.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.RESOURCE_TYPE, itemType)
             context.startActivity(i)
         }
         viewHolder.itemName.setOnClickListener {
             val i = Intent(context, ResourceDetailsActivity::class.java)
-            i.putExtra("id", resource.idElement.idPart.toString())
-            i.putExtra("type", itemType)
+            i.putExtra(ExtraCodes.RESOURCE_ID, resource.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.RESOURCE_TYPE, itemType)
             context.startActivity(i)
         }
     }
 
     override fun getItemCount(): Int {
         return mResources.size
-    }
-
-    fun loadNewResource(newResource: Resource) {
-        val count = mResources.size
-        mResources.add(newResource)
-        notifyItemInserted(count)
     }
 }

@@ -16,6 +16,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
+import com.vourer.fhirpatientoverview.utils.ExtraCodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -51,7 +52,7 @@ class GraphActivity : AppCompatActivity() {
 
 
         val extras = intent.extras ?: return
-        val patientId = extras.getString("id")
+        val patientId = extras.getString(ExtraCodes.PATIENT_ID)
 
         val types = arrayOf("Body Weight", "Body Height")
         val spinnerTypesAdapter = ArrayAdapter(
