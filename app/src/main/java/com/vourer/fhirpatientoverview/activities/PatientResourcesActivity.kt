@@ -89,6 +89,8 @@ class PatientResourcesActivity : AppCompatActivity() {
                 })
             }
             job.join()
+            val name = patient.name[0].nameAsSingleString
+            supportActionBar!!.title = "$name's Resources"
             resourcesRecycler.adapter?.notifyDataSetChanged()
         }
     }
@@ -118,7 +120,6 @@ class PatientResourcesActivity : AppCompatActivity() {
     }
 
     fun showGraphClicked(v: View) {
-//        Toast.makeText(this, "'Show graph' clicked", Toast.LENGTH_SHORT).show()
         val i = Intent(this, GraphActivity::class.java)
         i.putExtra("id", patient.idElement.idPart.toString())
         startActivity(i)

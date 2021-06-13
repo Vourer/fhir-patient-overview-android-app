@@ -174,16 +174,17 @@
                 android:id="@+id/noteText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:text="Note:" />
 
-            <TextView
+            <EditText
                 android:id="@+id/noteValue"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="5"
-                android:singleLine="false"
-                android:gravity="center"
-                android:text="" />
+                android:layout_height="match_parent"
+                android:ems="16"
+                android:gravity="center_vertical"
+                android:inputType="textShortMessage|textMultiLine"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
         </TableRow>
     </TableLayout>
 

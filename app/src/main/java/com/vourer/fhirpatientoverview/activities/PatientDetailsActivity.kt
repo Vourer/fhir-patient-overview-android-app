@@ -13,10 +13,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hl7.fhir.r4.model.Patient
+import kotlin.Exception
 
 
 class PatientDetailsActivity : AppCompatActivity() {
-    // views for patient attributes
     private lateinit var idOutput: TextView
     private lateinit var givenOutput: TextView
     private lateinit var familyOutput: TextView
@@ -41,11 +41,27 @@ class PatientDetailsActivity : AppCompatActivity() {
         loadPatientData(patientId!!)
     }
 
+    override fun onResume() {
+        super.onResume()
+        try {
+            loadPatientData(patient.idElement.idPart.toString())
+        } catch (e: Exception) {
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        try {
+            loadPatientData(patient.idElement.idPart.toString())
+        } catch (e: Exception) {
+        }
+    }
+
     fun editPatientClicked(v: View) {
         Toast.makeText(this, "'Edit' clicked", Toast.LENGTH_SHORT).show()
-//        val i = Intent(this, EditPatientActivity::class.java)
-//        i.putExtra("id", patient.idElement.idPart.toString())
-//        startActivity(i)
+        val i = Intent(this, EditPatientActivity::class.java)
+        i.putExtra("id", patient.idElement.idPart.toString())
+        startActivity(i)
     }
 
     fun resourcesClicked(v: View) {
@@ -72,13 +88,14 @@ class PatientDetailsActivity : AppCompatActivity() {
                 patient = hapiHandler.getPatientWithId(patientId)
             }
             job.join()
+            val fullName = patient.name[0].nameAsSingleString
             val given = patient.name[0].given.joinToString(" ")
             val family = patient.name[0].family
-            supportActionBar!!.title = "Details of $given $family"
+            supportActionBar!!.title = "Details of $fullName"
             idOutput.text = patient.idElement.idPart.toString()
             givenOutput.text = given
             familyOutput.text = family
-            genderOutput.text = patient.gender.toString()
+            genderOutput.text = patient.gender.display
             birthDateOutput.text = patient.birthDate.toString()
         }
     }

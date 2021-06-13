@@ -38,6 +38,16 @@ class MainActivity : AppCompatActivity() {
         reloadPatients()
     }
 
+    override fun onResume() {
+        super.onResume()
+        reloadPatients()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        reloadPatients()
+    }
+
     fun searchPatientClicked(v: View) {
         val nameFromInput = patientNameInput.text.toString()
         Toast.makeText(this, "Searching for names like '$nameFromInput'", Toast.LENGTH_LONG).show()

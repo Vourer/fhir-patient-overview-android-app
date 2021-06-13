@@ -1,7 +1,6 @@
 package com.vourer.fhirpatientoverview.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -21,15 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.hl7.fhir.r4.model.MedicationRequest
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
-import org.hl7.fhir.r4.model.Resource
 import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.Comparator
 
 
@@ -112,10 +108,10 @@ class GraphActivity : AppCompatActivity() {
                         }
                     }
                 }
-                resources.sortWith(Comparator<Resource> { r1, r2 ->
+                resources.sortWith(Comparator<Observation> { r1, r2 ->
                     when {
-                        getResourceSortingKey(r1) > getResourceSortingKey(r2) -> 1
-                        getResourceSortingKey(r1) == getResourceSortingKey(r2) -> 0
+                        r1.issued > r2.issued -> 1
+                        r1.issued == r2.issued -> 0
                         else -> -1
                     }
                 })
@@ -139,9 +135,6 @@ class GraphActivity : AppCompatActivity() {
             if (obsValue > 0) {
                 xLabels.add(obsDate)
                 yVals.add(Entry(i.toFloat(), obsValue))
-                Log.i("idx>>>>", i.toString())
-                Log.i("label>>>>", obsDate)
-                Log.i("value>>>>", obsValue.toString())
             }
         }
 
@@ -171,15 +164,6 @@ class GraphActivity : AppCompatActivity() {
 
     private fun fhirDateToString(date: LocalDate): String {
         return date.format(DateTimeFormatter.ofPattern("dd MM yyyy"))
-    }
-
-    private fun getResourceSortingKey(resource: Resource): Date {
-        if (resource is Observation) {
-            return resource.issued
-        } else if (resource is MedicationRequest) {
-            return resource.authoredOn
-        }
-        return Calendar.getInstance().time
     }
 
     private fun parseStringToDate(dateString: String): LocalDate {

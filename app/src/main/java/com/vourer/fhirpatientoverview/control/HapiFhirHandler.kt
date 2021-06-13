@@ -1,5 +1,6 @@
 package com.vourer.fhirpatientoverview.control
 
+import android.util.Log
 import com.vourer.fhirpatientoverview.clients.RestClient
 import org.hl7.fhir.r4.model.*
 import java.io.Serializable
@@ -15,30 +16,40 @@ class HapiFhirHandler: Serializable {
                 .encodedJson()
                 .returnBundle(Bundle::class.java)
                 .execute()
-        return getPagedEntries(bundle).stream()
+        val patients = getPagedEntries(bundle).stream()
                 .map(Bundle.BundleEntryComponent::getResource)
                 .filter(Patient::class.java::isInstance)
                 .map(Patient::class.java::cast)
-                //.sorted(Comparator.comparing{patient -> (patient!!.name[0].family).toString() })
                 .collect(Collectors.toList())
+        patients.sortWith(Comparator<Patient?> { p1, p2 ->
+            if (p1 != null && p2 != null && p1.name[0].family > p2.name[0].family) 1
+            else if (p1 != null && p2 != null && p1.name[0].family == p2.name[0].family) 0
+            else -1
+        })
+        return patients
     }
 
     fun getSearchedPatients(searchName: String): List<Patient?> {
         val client = RestClient.getGenericClient()
-        return client.search<Bundle>()
+        val patients = client.search<Bundle>()
                 .forResource(Patient::class.java)
                 .count(100)
                 .where(Patient.FAMILY.matches().value(searchName))
                 .encodedJson()
                 .returnBundle(Bundle::class.java)
                 .execute()
-                .getEntry()
+                .entry
                 .stream()
                 .map(Bundle.BundleEntryComponent::getResource)
                 .filter(Patient::class.java::isInstance)
                 .map(Patient::class.java::cast)
-                //.sorted(Comparator.comparing{patient -> (patient!!.name[0].family).toString() })
                 .collect(Collectors.toList())
+        patients.sortWith(Comparator<Patient?> { p1, p2 ->
+            if (p1 != null && p2 != null && p1.name[0].family > p2.name[0].family) 1
+            else if (p1 != null && p2 != null && p1.name[0].family == p2.name[0].family) 0
+            else -1
+        })
+        return patients
     }
 
     fun getPatientWithId(patientId: String): Patient {
@@ -99,5 +110,23 @@ class HapiFhirHandler: Serializable {
             entryList.add(entry)
         }
         return entryList
+    }
+
+    fun editPatientInfo(updatedPatient: Patient) {
+        val client = RestClient.getGenericClient()
+        val response = client.update().resource(updatedPatient).execute()
+        Log.i("Patient update response: ", "$response")
+    }
+
+    fun editObservationInfo(updatedObservation: Observation) {
+        val client = RestClient.getGenericClient()
+        val response = client.update().resource(updatedObservation).execute()
+        Log.i("Observation update response: ", "$response")
+    }
+
+    fun editMedicationInfo(updatedMedicationRequest: MedicationRequest) {
+        val client = RestClient.getGenericClient()
+        val response = client.update().resource(updatedMedicationRequest).execute()
+        Log.i("Medication Request update response: ", "$response")
     }
 }

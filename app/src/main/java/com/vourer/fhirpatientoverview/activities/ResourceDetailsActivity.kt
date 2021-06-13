@@ -1,9 +1,9 @@
 package com.vourer.fhirpatientoverview.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.vourer.fhirpatientoverview.R
@@ -12,12 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.hl7.fhir.r4.model.MedicationRequest
-import org.hl7.fhir.r4.model.Observation
-import org.hl7.fhir.r4.model.Quantity
-import org.hl7.fhir.r4.model.Resource
+import org.hl7.fhir.r4.model.*
 import java.lang.Exception
 import java.util.*
+
 
 class ResourceDetailsActivity : AppCompatActivity() {
     private lateinit var idOutput: TextView
@@ -25,9 +23,9 @@ class ResourceDetailsActivity : AppCompatActivity() {
     private lateinit var codeOutput: TextView
     private lateinit var dateOutput: TextView
     private lateinit var valueOutput: TextView
-    private lateinit var noteOutput: TextView
+    private lateinit var noteInput: EditText
 
-    //private lateinit var resource: Resource
+    private lateinit var mResource: Resource
     private val hapiHandler: HapiFhirHandler = HapiFhirHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +39,7 @@ class ResourceDetailsActivity : AppCompatActivity() {
         codeOutput = findViewById(R.id.codeValue)
         dateOutput = findViewById(R.id.dateValue)
         valueOutput = findViewById(R.id.valueValue)
-        noteOutput = findViewById(R.id.noteValue)
+        noteInput = findViewById(R.id.noteValue)
 
         val extras = intent.extras ?: return
         val resourceId = extras.getString("id")
@@ -50,10 +48,35 @@ class ResourceDetailsActivity : AppCompatActivity() {
     }
 
     fun editResourceClicked(v: View) {
-        Toast.makeText(this, "'Edit' clicked", Toast.LENGTH_SHORT).show()
-//        val i = Intent(this, EditPatientActivity::class.java)
-//        i.putExtra("id", patient.idElement.idPart.toString())
-//        startActivity(i)
+        val newNoteInput = noteInput.text.toString()
+        val newResource = mResource
+        if (newResource is Observation) {
+            if (newNoteInput != newResource.noteFirstRep.text) {
+                newResource.noteFirstRep.text = newNoteInput
+                runBlocking {
+                    val job: Job = launch(context = Dispatchers.Default) {
+                        hapiHandler.editObservationInfo(newResource)
+                    }
+                    job.join()
+                }
+                Toast.makeText(this, "Changes saved", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No changes were made", Toast.LENGTH_SHORT).show()
+            }
+        } else if (newResource is MedicationRequest) {
+            if (newNoteInput != newResource.noteFirstRep.text) {
+                newResource.noteFirstRep.text = newNoteInput
+                runBlocking {
+                    val job: Job = launch(context = Dispatchers.Default) {
+                        hapiHandler.editMedicationInfo(newResource)
+                    }
+                    job.join()
+                }
+                Toast.makeText(this, "Changes saved", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No changes were made", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     fun goBackClicked(v: View) {
@@ -64,14 +87,14 @@ class ResourceDetailsActivity : AppCompatActivity() {
         var resource: Resource? = null
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-                resource = if (resourceType == "m") {
+                mResource = if (resourceType == "m") {
                     hapiHandler.getMedicationRequestWithId(resourceId)
                 } else {
                     hapiHandler.getObservationWithId(resourceId)
                 }
             }
             job.join()
-            populateWidgets(resource!!)
+            populateWidgets(mResource)
         }
     }
 
@@ -88,7 +111,7 @@ class ResourceDetailsActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 valueOutput.text = "N/A"
             }
-            noteOutput.text = resource.noteFirstRep.text
+            noteInput.setText(resource.noteFirstRep.text)
         } else if (resource is MedicationRequest) {
             typeOutput.text = "Medication Request"
             codeOutput.text = resource.medicationCodeableConcept.codingFirstRep.display
@@ -96,7 +119,7 @@ class ResourceDetailsActivity : AppCompatActivity() {
             val valueText = findViewById<TextView>(R.id.valueText)
             valueText.text = ""
             valueOutput.text = ""
-            noteOutput.text = resource.noteFirstRep.text
+            noteInput.setText(resource.noteFirstRep.text)
         }
     }
 }
