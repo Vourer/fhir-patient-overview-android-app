@@ -9,7 +9,7 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 
 object RestClient {
     private val TAG = "REST CLIENT"
-    private val BASE_URL = "http://192.168.0.105:8080/baseR4"
+    private val BASE_URL = "http://192.168.0.104:8080/baseR4"
     private var iGenericClient: IGenericClient? = null
     private var fhirContext: FhirContext? = null
 

@@ -1,5 +1,6 @@
 package com.vourer.fhirpatientoverview.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -117,10 +118,10 @@ class PatientResourcesActivity : AppCompatActivity() {
     }
 
     fun showGraphClicked(v: View) {
-        Toast.makeText(this, "'Show graph' clicked", Toast.LENGTH_SHORT).show()
-//        val i = Intent(this, GraphActivity::class.java)
-//        i.putExtra("id", patient.idElement.idPart.toString())
-//        startActivity(i)
+//        Toast.makeText(this, "'Show graph' clicked", Toast.LENGTH_SHORT).show()
+        val i = Intent(this, GraphActivity::class.java)
+        i.putExtra("id", patient.idElement.idPart.toString())
+        startActivity(i)
     }
 
     fun refreshClicked(v: View) {
