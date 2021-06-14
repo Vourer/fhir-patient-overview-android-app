@@ -1,9 +1,9 @@
 package com.vourer.fhirpatientoverview.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.vourer.fhirpatientoverview.R
 import com.vourer.fhirpatientoverview.control.HapiFhirHandler
 import com.vourer.fhirpatientoverview.utils.ExtraCodes
@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.StringType
+
 
 class EditPatientActivity : AppCompatActivity() {
     private lateinit var idOutput: TextView
@@ -37,7 +38,8 @@ class EditPatientActivity : AppCompatActivity() {
         birthDateOutput = findViewById(R.id.birthDateValue)
 
         val genders = Enumerations.AdministrativeGender.values()
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genders)
+        val validGenders = genders.dropLast(1)  // the last value is 'Null' - we don't want it
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, validGenders)
         genderSpinner.adapter = spinnerAdapter
         genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -67,12 +69,24 @@ class EditPatientActivity : AppCompatActivity() {
     private fun populateWidgets() {
         val given = patient.name[0].given.joinToString(" ")
         val family = patient.name[0].family
-        supportActionBar!!.title = "Editing patient $given $family"
+        supportActionBar!!.title = "Editing details of $given $family"
         idOutput.text = patient.idElement.idPart.toString()
         givenInput.setText(given)
         familyInput.setText(family)
         birthDateOutput.text = patient.birthDate.toString()
         selectedGender = patient.gender.toCode()
+        genderSpinner.setSelection(getSpinnerIndex(selectedGender))
+    }
+
+    private fun getSpinnerIndex(gender: String): Int {
+        var index = 0
+        for (i in 0 until genderSpinner.count) {
+            if (genderSpinner.getItemAtPosition(i).equals(Enumerations.AdministrativeGender.fromCode(gender))) {
+                index = i
+                break
+            }
+        }
+        return index
     }
 
     fun saveChangesClicked(v: View) {

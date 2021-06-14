@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FHIRPatientOverview"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activities.VersionDetailsActivity" />
+        <activity android:name=".activities.PatientVersionsActivity" />
         <activity
             android:name=".activities.GraphActivity"
             android:windowSoftInputMode="adjustPan" />

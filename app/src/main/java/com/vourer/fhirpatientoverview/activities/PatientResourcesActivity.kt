@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -122,12 +121,11 @@ class PatientResourcesActivity : AppCompatActivity() {
 
     fun showGraphClicked(v: View) {
         val i = Intent(this, GraphActivity::class.java)
-        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart)
         startActivity(i)
     }
 
     fun refreshClicked(v: View) {
-        Toast.makeText(this, "'Refresh' clicked", Toast.LENGTH_SHORT).show()
-        loadPatientResources(patient.idElement.idPart.toString())
+        loadPatientResources(patient.idElement.idPart)
     }
 }

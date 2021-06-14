@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.02">
 
         <Space
             android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.03">
+        app:layout_constraintVertical_bias="0.1">
 
         <TableRow
             android:layout_width="match_parent"
@@ -142,9 +142,9 @@
                 android:id="@+id/genderValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:maxLines="5"
                 android:singleLine="false"
-                android:gravity="center"
                 android:text="" />
 
         </TableRow>
@@ -165,9 +165,9 @@
                 android:id="@+id/birthDateValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:maxLines="5"
                 android:singleLine="false"
-                android:gravity="center"
                 android:text="" />
 
         </TableRow>

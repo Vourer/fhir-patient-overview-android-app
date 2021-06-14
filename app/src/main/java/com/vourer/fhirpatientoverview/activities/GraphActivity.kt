@@ -183,6 +183,6 @@ class GraphActivity : AppCompatActivity() {
     }
 
     fun refreshChartClicked(v: View) {
-        loadPatientResources(patient.idElement.idPart.toString())
+        loadPatientResources(patient.idElement.idPart)
     }
 }

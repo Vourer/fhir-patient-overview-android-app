@@ -57,6 +57,11 @@ class HapiFhirHandler: Serializable {
         return client.read().resource(Patient::class.java).withId(patientId).execute()
     }
 
+    fun getPatientWithUrl(patientUrl: String): Patient {
+        val client = RestClient.getGenericClient()
+        return client.read().resource(Patient::class.java).withUrl(patientUrl).execute()
+    }
+
     fun getPatientObservations(patient: Patient): List<Resource?> {
         val client = RestClient.getGenericClient()
         val bundle: Bundle = client.search<Bundle>()

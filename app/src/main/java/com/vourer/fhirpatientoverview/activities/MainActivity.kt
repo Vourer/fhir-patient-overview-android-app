@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     fun searchPatientClicked(v: View) {
         val nameFromInput = patientNameInput.text.toString()
-        Toast.makeText(this, "Searching for names like '$nameFromInput'", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Searching for names like '$nameFromInput'", Toast.LENGTH_SHORT).show()
         reloadPatients()
     }
 

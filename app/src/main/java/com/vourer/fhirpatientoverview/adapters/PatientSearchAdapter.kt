@@ -37,7 +37,7 @@ class PatientSearchAdapter (private val mPatients: ArrayList<Patient>) : Recycle
 
         viewHolder.searchItemName.setOnClickListener {
             val i = Intent(context, PatientDetailsActivity::class.java)
-            i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart)
             context.startActivity(i)
         }
 
@@ -48,7 +48,7 @@ class PatientSearchAdapter (private val mPatients: ArrayList<Patient>) : Recycle
 
         viewHolder.searchItemBirthDate.setOnClickListener {
             val i = Intent(context, PatientDetailsActivity::class.java)
-            i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart)
             context.startActivity(i)
         }
     }

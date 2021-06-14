@@ -3,6 +3,7 @@ package com.vourer.fhirpatientoverview.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -45,7 +46,7 @@ class PatientDetailsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         try {
-            loadPatientData(patient.idElement.idPart.toString())
+            loadPatientData(patient.idElement.idPart)
         } catch (e: Exception) {
         }
     }
@@ -53,29 +54,29 @@ class PatientDetailsActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         try {
-            loadPatientData(patient.idElement.idPart.toString())
+            loadPatientData(patient.idElement.idPart)
         } catch (e: Exception) {
         }
     }
 
     fun editPatientClicked(v: View) {
         val i = Intent(this, EditPatientActivity::class.java)
-        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart)
         startActivity(i)
     }
 
     fun resourcesClicked(v: View) {
         Toast.makeText(this, "Loading Observations and Medication Requests...", Toast.LENGTH_SHORT).show()
         val i = Intent(this, PatientResourcesActivity::class.java)
-        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart)
         startActivity(i)
     }
 
     fun historyClicked(v: View) {
-        Toast.makeText(this, "'History of changes' clicked", Toast.LENGTH_SHORT).show()
-//        val i = Intent(this, EditPatientActivity::class.java)
-//        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart.toString())
-//        startActivity(i)
+        Toast.makeText(this, "Loading history of changes...", Toast.LENGTH_SHORT).show()
+        val i = Intent(this, PatientVersionsActivity::class.java)
+        i.putExtra(ExtraCodes.PATIENT_ID, patient.idElement.idPart)
+        startActivity(i)
     }
 
     fun goBackClicked(v: View) {
@@ -88,15 +89,33 @@ class PatientDetailsActivity : AppCompatActivity() {
                 patient = hapiHandler.getPatientWithId(patientId)
             }
             job.join()
-            val fullName = patient.name[0].nameAsSingleString
-            val given = patient.name[0].given.joinToString(" ")
-            val family = patient.name[0].family
-            supportActionBar!!.title = "Details of $fullName"
-            idOutput.text = patient.idElement.idPart.toString()
-            givenOutput.text = given
-            familyOutput.text = family
-            genderOutput.text = patient.gender.display
-            birthDateOutput.text = patient.birthDate.toString()
+            populateWidgets()
+        }
+    }
+
+    private fun populateWidgets() {
+        val fullName = patient.name[0].nameAsSingleString
+        val given = patient.name[0].given.joinToString(" ")
+        val family = patient.name[0].family
+        supportActionBar!!.title = "Details of $fullName"
+        idOutput.text = patient.idElement.idPart
+        givenOutput.text = given
+        familyOutput.text = family
+        genderOutput.text = patient.gender.display
+        birthDateOutput.text = patient.birthDate.toString()
+        setHistoryButton()
+    }
+
+    private fun setHistoryButton() {
+        val url = patient.idElement.baseUrl + "/Patient/" + patient.idElement.idPart + "/_history"
+        var history = listOf<Patient?>()
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                history = hapiHandler.getPatientHistory(url)
+            }
+            job.join()
+            val historyButton: Button = findViewById(R.id.historyButton)
+            historyButton.isEnabled = (history.size >= 2)
         }
     }
 

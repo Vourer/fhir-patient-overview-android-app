@@ -24,8 +24,8 @@ class PatientResourcesAdapter (private val mResources: ArrayList<Resource>) : Re
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PatientResourcesAdapter.ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
-        val searchResultsView = inflater.inflate(R.layout.patient_resource_row, parent, false)
-        return ViewHolder(searchResultsView)
+        val patientResourcesView = inflater.inflate(R.layout.patient_resource_row, parent, false)
+        return ViewHolder(patientResourcesView)
     }
 
     override fun onBindViewHolder(viewHolder: PatientResourcesAdapter.ViewHolder, position: Int) {
@@ -51,13 +51,13 @@ class PatientResourcesAdapter (private val mResources: ArrayList<Resource>) : Re
 
         viewHolder.itemDate.setOnClickListener {
             val i = Intent(context, ResourceDetailsActivity::class.java)
-            i.putExtra(ExtraCodes.RESOURCE_ID, resource.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.RESOURCE_ID, resource.idElement.idPart)
             i.putExtra(ExtraCodes.RESOURCE_TYPE, itemType)
             context.startActivity(i)
         }
         viewHolder.itemName.setOnClickListener {
             val i = Intent(context, ResourceDetailsActivity::class.java)
-            i.putExtra(ExtraCodes.RESOURCE_ID, resource.idElement.idPart.toString())
+            i.putExtra(ExtraCodes.RESOURCE_ID, resource.idElement.idPart)
             i.putExtra(ExtraCodes.RESOURCE_TYPE, itemType)
             context.startActivity(i)
         }
