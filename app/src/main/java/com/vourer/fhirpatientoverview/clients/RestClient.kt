@@ -8,12 +8,12 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 
 
 object RestClient {
-    private val TAG = "REST CLIENT"
-    private val BASE_URL = "http://192.168.0.104:8080/baseR4"
+    private const val TAG = "REST CLIENT"
+    private const val BASE_URL = "http://192.168.0.104:8080/baseR4"
     private var iGenericClient: IGenericClient? = null
     private var fhirContext: FhirContext? = null
 
-    fun getFhirContext(): FhirContext {
+    private fun getFhirContext(): FhirContext {
         if (fhirContext == null) {
             fhirContext = FhirContext.forR4()
             val proxy: Map<String, String> = getProxyDetails()
